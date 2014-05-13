@@ -5,9 +5,6 @@
  *
  * @author Peter Knut
  * @copyright 2014 Pematon, s.r.o. (http://www.pematon.com/)
- *
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
- * @license http://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, version 2 (one or other)
  */
 class AdminerJsonPreview
 {
@@ -21,6 +18,8 @@ class AdminerJsonPreview
 
 	/**
 	 * @param int Max. level in recursion. 0 means no limit.
+	 * @param bool Whether apply JSON preview in selection table.
+	 * @param bool Whether apply JSON preview in edit form.
 	 */
 	function AdminerJsonPreview($maxLevel = 0, $inTable = TRUE, $inEdit = TRUE)
 	{

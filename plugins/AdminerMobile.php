@@ -6,9 +6,6 @@
  *
  * @author Peter Knut
  * @copyright 2014 Pematon, s.r.o. (http://www.pematon.com/)
- *
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
- * @license http://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, version 2 (one or other)
  */
 class AdminerMobile
 {
@@ -36,6 +33,23 @@ class AdminerMobile
 		<?php elseif (strpos($userAgent, "BlackBerry") !== false || strpos($userAgent, "PlayBook") !== false): ?>
 			<link rel="apple-touch-icon" href="images/touchIcon.png"/>
 		<?php endif; ?>
+
+		<script>
+			window.addEventListener("load", function() {
+				var menu = document.getElementById("menu");
+				var button = menu.getElementsByTagName("h1")[0];
+				if (!menu || !button)
+					return;
+
+				button.addEventListener("click", function() {
+					if (menu.className.indexOf(" open") >= 0)
+						menu.className = menu.className.replace(/ *open/, "");
+					else
+						menu.className += " open";
+				}, false);
+			}, false);
+
+		</script>
 
 		<?php
 	}
