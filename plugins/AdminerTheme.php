@@ -7,7 +7,7 @@
  * @author Peter Knut
  * @copyright 2014 Pematon, s.r.o. (http://www.pematon.com/)
  */
-class AdminerMobile
+class AdminerTheme
 {
 
 	function head()
