@@ -187,6 +187,10 @@ class AdminerJsonPreview
 					$val = mb_substr($val, 0, self::MAX_TEXT_LENGTH - 3, "UTF-8") . "...";
 
 				$value .= "<code>" . nl2br(h($val)) . "</code>";
+			} elseif (is_bool($val)) {
+				$value .= "<code class='jush'>" . h($val ? "true" : "false") . "</code>";
+			} elseif (is_null($val)) {
+				$value .= "<code class='jush'>null</code>";
 			} else {
 				$value .= "<code class='jush'>" . h($val) . "</code>";
 			}
