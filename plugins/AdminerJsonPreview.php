@@ -183,13 +183,20 @@ class AdminerJsonPreview
 			} elseif (is_array($val)) {
 				$value .= "<code class='jush-js'>" . h(preg_replace('/([,:])([^\s])/', '$1 $2', json_encode($val))) . "</code>";
 			} elseif (is_string($val)) {
+				// Shorten string to max. length.
 				if (mb_strlen($val, "UTF-8") > self::MAX_TEXT_LENGTH)
 					$val = mb_substr($val, 0, self::MAX_TEXT_LENGTH - 3, "UTF-8") . "...";
 
+				// Add extra new line to make it visible in HTML output.
+				if (preg_match("@\n$@", $val))
+					$val .= "\n";
+
 				$value .= "<code>" . nl2br(h($val)) . "</code>";
 			} elseif (is_bool($val)) {
+				// Handle boolean values.
 				$value .= "<code class='jush'>" . h($val ? "true" : "false") . "</code>";
 			} elseif (is_null($val)) {
+				// Handle null value.
 				$value .= "<code class='jush'>null</code>";
 			} else {
 				$value .= "<code class='jush'>" . h($val) . "</code>";
