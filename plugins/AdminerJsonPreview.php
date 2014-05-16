@@ -10,10 +10,13 @@ class AdminerJsonPreview
 {
 	const MAX_TEXT_LENGTH = 100;
 
+	/** @var int */
 	protected $maxLevel;
 
+	/** @var bool */
 	protected $inTable;
 
+	/** @var bool */
 	protected $inEdit;
 
 	/**

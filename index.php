@@ -15,6 +15,7 @@ function adminer_object()
 		new AdminerDatabaseHide(array("mysql", "information_schema", "performance_schema")),
 		new AdminerLoginServers(array(filter_input(INPUT_SERVER, 'SERVER_NAME'))),
 		new AdminerTheme(),
+		new AdminerSimpleMenu(),
 		new AdminerJsonPreview(),
 	);
 
