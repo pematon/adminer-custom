@@ -3,7 +3,7 @@
 /**
  * Displays only one prefered action in table list.
  *
- * Get rid of schizofrenic decisions between selecting data and showing table structure.
+ * Get rid of schizophrenic decisions between selecting data and showing table structure.
  * Optimize your workflow!
  *
  * @author Peter Knut
