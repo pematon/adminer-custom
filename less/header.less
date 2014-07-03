@@ -25,7 +25,7 @@ h1 {
 }
 
 #version:hover {
-	color: #B04D00;
+	color: @linkColorHover;
 }
 
 #lang {
@@ -34,14 +34,14 @@ h1 {
 	top: 0;
 	left: auto;
 	border: none;
-	border-bottom: 1px solid #ddd;
+	border-bottom: 1px solid @blockBorderColor;
 	padding: 0 0 0 10px;
 	width: 190px;
 	height: 40px;
 	line-height: 30px;
 	font-size: 0;
 	z-index: 101;
-	background: #f6f6f6;
+	background: @blockBgColor;
 
 	select {
 		height: 28px;
@@ -69,7 +69,7 @@ h1 {
 
 		&:hover {
 			background: transparent;
-			color: #B04D00;
+			color: @linkColorHover;
 		}
 	}
 }
@@ -81,8 +81,8 @@ h1 {
 		top: 0;
 		width: auto;
 		height: 40px;
-		border-top: 1px solid #ddd;
-		background: #f6f6f6;
+		border-top: 1px solid @blockBorderColor;
+		background: @blockBgColor;
 		text-align: right;
 
 		select {
