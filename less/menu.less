@@ -9,6 +9,7 @@
 	border-right: 1px solid @blockBorderColor;
 	overflow-y: auto;
 	overflow-x: hidden;
+	-webkit-overflow-scrolling: touch;
 	background: @bgColor;
 	z-index: 100;
 
@@ -130,13 +131,13 @@
 			color: @linkColor !important;
 		}
 
-		&:hover {
-			background: @menuHoverColor;
-		}
-
 		&:before {
 			content: "";
 		}
+	}
+
+	li:hover {
+		background: @menuHoverColor;
 	}
 
 	li:first-child a {
