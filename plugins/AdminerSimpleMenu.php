@@ -53,7 +53,10 @@ class AdminerSimpleMenu
 	 */
 	function tablesPrint($tables)
 	{
-		echo "<ul id='tables' onmouseover='menuOver(this, event);' onmouseout='menuOut(this);' class='simple'>\n";
+		if (defined("PMTN_ADMINER_THEME"))
+			echo "<ul id='tables' class='simple'>\n";
+		else
+			echo "<ul id='tables' onmouseover='menuOver(this, event);' onmouseout='menuOut(this);' class='simple'>\n";
 
 		foreach ($tables as $table => $status) {
 			$name = Adminer::tableName($status);
