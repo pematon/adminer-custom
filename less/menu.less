@@ -1,3 +1,37 @@
+h1 {
+	height: 40px;
+}
+
+#h1 {
+	display: inline-block;
+	padding: 0;
+	background: url("images/logo.png?2") 10px center no-repeat;
+	background-size: 120px;
+	text-indent: -100px;
+	width: 135px;
+	height: 40px;
+}
+
+.version {
+	position: relative;
+	top: -7px;
+	vertical-align: bottom;
+	font-size: 8pt;
+	font-style: italic;
+	color: @note2Color;
+}
+
+#version {
+	&:extend(.version);
+
+	padding: 5px;
+	color: @linkColor;
+}
+
+#version:hover {
+	color: @linkColorHover;
+}
+
 #menu {
 	position: fixed;
 	left: 0;
@@ -249,7 +283,7 @@
 	only screen and (min-device-pixel-ratio: 1.5)
 {
 	#h1 {
-		background: url("images/logo-hres.png") center bottom no-repeat;
-		background-size: 180px;
+		background-image: url("images/logo-hres.png?2");
+		background-size: 120px;
 	}
 }
