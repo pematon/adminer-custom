@@ -125,7 +125,7 @@ h1 {
 
 		&:before {
 			content: "📄  ";
-			font-family: entypo;
+			font-family: entypo, sans-serif;
 			font-size: 24pt;
 			line-height: 0;
 			vertical-align: -3px;
@@ -229,7 +229,7 @@ h1 {
 			width: 30px;
 			height: 30px;
 			content: "📸";
-			font-family: "entypo";
+			font-family: "entypo", sans-serif;
 			font-size: 32pt;
 			line-height: 30px;
 			border: 1px solid @lightBorderColor;
@@ -241,9 +241,8 @@ h1 {
 		}
 
 		&.open {
-			width: auto;
-			height: auto;
 			width: @menuWidth;
+			height: auto;
 			max-width: 100%;
 			max-height: 100%;
 			border-right: 1px solid @blockBorderColor;
