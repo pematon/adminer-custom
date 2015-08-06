@@ -9,7 +9,6 @@
  */
 class AdminerTheme
 {
-
 	function head()
 	{
 		define("PMTN_ADMINER_THEME", true);
@@ -18,19 +17,23 @@ class AdminerTheme
 
 		?>
 
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, target-densitydpi=medium-dpi"/>
 
-		<?php if (strpos($userAgent, "iPhone") !== false || strpos($userAgent, "iPad") !== false): ?>
-			<link rel="apple-touch-icon-precomposed" href="images/touchIcon.png"/>
-
-		<?php elseif (strpos($userAgent, "Android") !== false): ?>
-			<link rel="apple-touch-icon-precomposed" href="images/touchIcon-android.png"/>
-
-		<?php elseif (strpos($userAgent, "Windows") !== false): ?>
+		<?php
+			// Condition for Windows Phone has to be the first, because IE11 contains also iPhone and Android keywords.
+			if (strpos($userAgent, "Windows") !== false):
+		?>
 			<meta name="application-name" content="Adminer"/>
 			<meta name="msapplication-TileColor" content="#ffffff"/>
 			<meta name="msapplication-square150x150logo" content="images/tileIcon.png"/>
 			<meta name="msapplication-wide310x150logo" content="images/tileIcon-wide.png"/>
+
+		<?php elseif (strpos($userAgent, "iPhone") !== false || strpos($userAgent, "iPad") !== false): ?>
+			<link rel="apple-touch-icon-precomposed" href="images/touchIcon.png"/>
+
+		<?php elseif (strpos($userAgent, "Android") !== false): ?>
+			<link rel="apple-touch-icon-precomposed" href="images/touchIcon-android.png"/>
 
 		<?php elseif (strpos($userAgent, "BlackBerry") !== false || strpos($userAgent, "PlayBook") !== false): ?>
 			<link rel="apple-touch-icon" href="images/touchIcon.png"/>
