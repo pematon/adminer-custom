@@ -9,7 +9,7 @@
  */
 class AdminerTheme
 {
-	function head()
+	public function head()
 	{
 		define("PMTN_ADMINER_THEME", true);
 
@@ -19,6 +19,8 @@ class AdminerTheme
 
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1, target-densitydpi=medium-dpi"/>
+
+		<link rel="icon" type="image/ico" href="images/favicon.png">
 
 		<?php
 			// Condition for Windows Phone has to be the first, because IE11 contains also iPhone and Android keywords.
@@ -33,11 +35,13 @@ class AdminerTheme
 			<link rel="apple-touch-icon-precomposed" href="images/touchIcon.png"/>
 
 		<?php elseif (strpos($userAgent, "Android") !== false): ?>
-			<link rel="apple-touch-icon-precomposed" href="images/touchIcon-android.png"/>
+			<link rel="apple-touch-icon-precomposed" href="images/touchIcon-android.png?2"/>
 
-		<?php elseif (strpos($userAgent, "BlackBerry") !== false || strpos($userAgent, "PlayBook") !== false): ?>
+		<?php else: ?>
 			<link rel="apple-touch-icon" href="images/touchIcon.png"/>
 		<?php endif; ?>
+
+		<link rel="stylesheet" type="text/css" href="adminer.css">
 
 		<script>
 			window.addEventListener("load", function() {
@@ -57,5 +61,7 @@ class AdminerTheme
 		</script>
 
 		<?php
+
+		return false;
 	}
 }
