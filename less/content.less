@@ -1,0 +1,150 @@
+
+#content {
+	position: relative;
+	margin: 0 0 0 (@menuWidth + 1);
+	padding: 0 20px 40px 20px; // Bottom padding creates space for table paginator.
+	border-top: 41px solid @blockBgColor;
+
+	// Table comment.
+	.links + p {
+		color: @noteColor;
+	}
+}
+
+#breadcrumb {
+	position: fixed;
+	left: @menuWidth + 1;
+	top: 0;
+	right: 0;
+	margin: 0;
+	padding: 0 0 0 20px;
+	border-right: 205px solid @blockBgColor;
+	border-bottom: 1px solid @blockBorderColor;
+	background: @blockBgColor;
+	height: 40px;
+	line-height: 40px;
+	z-index: 100;
+	overflow: hidden;
+	text-overflow: ellipsis;
+
+	a {
+		display: inline-block;
+		padding: 0;
+		height: 40px;
+		line-height: 40px;
+	}
+}
+
+h2 {
+	margin: 20px 0;
+	font-size: 20pt;
+	color: @textColor;
+}
+
+h3 {
+	margin: 30px 0 10px 0;
+	font-size: 16pt;
+}
+
+p {
+	margin: 10px 0;
+}
+
+code {
+	display: block;
+	padding: 10px;
+	margin: 5px 0;
+	border-left: 7px solid @codeBorderColor;
+	border-radius: 2px;
+	background: @codeBgColor;
+	overflow: auto;
+}
+
+td code, th code,
+fieldset code:first-child // Match fieldset "From server" in import, but not filedset with SQL history.
+{
+	display: inline;
+	margin: 0;
+	padding: 0;
+	background: none;
+	border: none;
+}
+
+pre code {
+	margin: 0;
+}
+
+fieldset code + i {
+	display: none;
+}
+
+.time {
+	margin-left: 10px;
+	float: right;
+	font-size: 8pt;
+	color: @note2Color;
+}
+
+.error, .message {
+	margin: 20px 0;
+	padding: 10px;
+	border-left: 7px solid #cec;
+}
+
+.error {
+	color: #900;
+	border-color: #ecc;
+}
+
+.message {
+	pre {
+		margin: 15px 0 5px 0;
+	}
+
+	p {
+		margin: 0 0 5px 0;
+	}
+}
+
+pre + .message, pre + .error {
+	margin-top: 0;
+}
+
+#help {
+	z-index: 200;
+	border: 1px solid @blockBorderColor;
+	border-radius: 2px;
+	background: @blockBgColor;
+	padding: 5px 7px;
+}
+
+.icon {
+	background-color: @linkColor;
+}
+
+.icon:hover {
+	background-color: @linkColorHover;
+}
+
+@media only screen and (max-width: 768px) {
+	#content {
+		margin-left: 0;
+	}
+
+	#breadcrumb {
+		left: 0;
+		padding-left: 50px;
+		border-right-width: 0;
+	}
+}
+
+@media only screen and (max-width: 360px) {
+	#content {
+		padding: 0 10px 20px;
+	}
+
+	h2 {
+		margin: 15px 0;
+		font-size: 16pt;
+	}
+}
