@@ -1,3 +1,5 @@
+@import "variables.less";
+
 label {
 	padding: 3px 10px;
 }
@@ -63,7 +65,7 @@ input[type="submit"]:hover {
 }
 
 input[type="submit"][disabled=""]:hover {
-	background: mix(@linkColor, @bgColor, 50%);
+	background: @bgColor;
 }
 
 input[type="submit"].default {

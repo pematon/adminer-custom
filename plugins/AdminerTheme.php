@@ -5,16 +5,30 @@
  * This includes meta headers, touch icons and other stuff related to Pematon's custom theme.
  *
  * @author Peter Knut
- * @copyright 2014 Pematon, s.r.o. (http://www.pematon.com/)
+ * @copyright 2014-2015 Pematon, s.r.o. (http://www.pematon.com/)
  */
 class AdminerTheme
 {
+	/** @var string */
+	protected $themeName;
+
+	/**
+	 * @param string $themeName File with this name and .css extension should be located in css folder.
+	 */
+	function AdminerTheme($themeName = "default-orange")
+	{
+		$this->themeName = $themeName;
+	}
+
+	/**
+	 * Prints HTML code inside <head>.
+	 * @return false
+	 */
 	public function head()
 	{
 		define("PMTN_ADMINER_THEME", true);
 
 		$userAgent = filter_input(INPUT_SERVER, "HTTP_USER_AGENT");
-
 		?>
 
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -41,9 +55,10 @@ class AdminerTheme
 			<link rel="apple-touch-icon" href="images/touchIcon.png"/>
 		<?php endif; ?>
 
-		<link rel="stylesheet" type="text/css" href="adminer.css">
+		<link rel="stylesheet" type="text/css" href="css/<?= htmlspecialchars($this->themeName) ?>.css">
 
 		<script>
+
 			window.addEventListener("load", function() {
 				var menu = document.getElementById("menu");
 				var button = menu.getElementsByTagName("h1")[0];
@@ -62,6 +77,7 @@ class AdminerTheme
 
 		<?php
 
+		// Return false to disable linking of adminer.css and original favicon.
 		return false;
 	}
 }

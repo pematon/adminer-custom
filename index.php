@@ -2,10 +2,10 @@
 
 function adminer_object()
 {
-	// required to run any plugin
+	// Required to run any plugin.
 	include_once "./plugins/plugin.php";
 
-	// autoloader
+	// Plugins auto-loader.
 	foreach (glob("plugins/*.php") as $filename) {
 		include_once "./$filename";
 	}
@@ -21,5 +21,6 @@ function adminer_object()
 
 	return new AdminerPlugin($plugins);
 }
-// include original Adminer or Adminer Editor
+
+// Include original Adminer or Adminer Editor.
 include "./adminer.php";
