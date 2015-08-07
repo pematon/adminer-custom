@@ -4,7 +4,7 @@
  * Displays JSON preview as a table.
  *
  * @author Peter Knut
- * @copyright 2014 Pematon, s.r.o. (http://www.pematon.com/)
+ * @copyright 2014-2015 Pematon, s.r.o. (http://www.pematon.com/)
  */
 class AdminerJsonPreview
 {
@@ -20,20 +20,23 @@ class AdminerJsonPreview
 	protected $inEdit;
 
 	/**
-	 * @param int Max. level in recursion. 0 means no limit.
-	 * @param bool Whether apply JSON preview in selection table.
-	 * @param bool Whether apply JSON preview in edit form.
+	 * @param int $maxLevel Max. level in recursion. 0 means no limit.
+	 * @param bool $inTable Whether apply JSON preview in selection table.
+	 * @param bool $inEdit Whether apply JSON preview in edit form.
 	 */
-	function AdminerJsonPreview($maxLevel = 0, $inTable = TRUE, $inEdit = TRUE)
+	public function AdminerJsonPreview($maxLevel = 0, $inTable = true, $inEdit = true)
 	{
 		$this->maxLevel = $maxLevel;
 		$this->inTable = $inTable;
 		$this->inEdit = $inEdit;
 	}
 
-	function head()
+	/**
+	 * Prints HTML code inside <head>.
+	 * @return true
+	 */
+	public function head()
 	{
-
 		?>
 
 		<style>
@@ -139,35 +142,39 @@ class AdminerJsonPreview
 
 		<?php
 
+		// Return true to allow linking of adminer.css.
+		return true;
 	}
 
-	function selectVal(&$val, $link, $field, $original)
+	public function selectVal(&$val, $link, $field, $original)
 	{
 		static $counter = 1;
 
-		if (!$this->inTable)
+		if (!$this->inTable) {
 			return;
+		}
 
-		if (is_string($original) && substr($original, 0, 1) == '{' && ($json = json_decode($original, TRUE))) {
+		if (is_string($original) && substr($original, 0, 1) == '{' && ($json = json_decode($original, true))) {
 			$val = "<a class='icon json-icon' href='#' onclick='toggleJson(this, $counter);return false;' title='JSON'>JSON</a> " . $val;
 			$val .= $this->convertJson($json, 1, $counter++);
 		}
 	}
 
-	function editInput($table, $field, $attrs, $value)
+	public function editInput($table, $field, $attrs, $value)
 	{
 		static $counter = 1;
 
-		if (!$this->inEdit)
+		if (!$this->inEdit) {
 			return;
+		}
 
-		if (is_string($value) && substr($value, 0, 1) == '{' && ($json = json_decode($value, TRUE))) {
+		if (is_string($value) && substr($value, 0, 1) == '{' && ($json = json_decode($value, true))) {
 			echo "<a class='icon json-icon json-link' href='#' onclick='toggleJson(this, $counter);return false;' title='JSON'><span>JSON</span></a><br/>";
 			echo $this->convertJson($json, 1, $counter);
 		}
 	}
 
-	function convertJson($json, $level = 1, $id = 0)
+	public function convertJson($json, $level = 1, $id = 0)
 	{
 		$value = "";
 
