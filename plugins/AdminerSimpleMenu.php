@@ -12,24 +12,27 @@
 class AdminerSimpleMenu
 {
 	/** @var bool */
-	protected $prefereSelect;
+	protected $preferSelect;
 
 	/** @var bool */
 	protected $reorderLinks;
 
 	/**
-	 * @param bool Whether to prefere table selection before editing structure.
-	 * @param bool Whether links above data table will be reordered to reflect workflow priority.
+	 * @param bool $preferSelect Whether to prefer table selection before editing structure.
+	 * @param bool $reorderLinks Whether links above data table will be reordered to reflect workflow priority.
 	 */
-	function AdminerSimpleMenu($prefereSelect = TRUE, $reorderLinks = TRUE)
+	public function AdminerSimpleMenu($preferSelect = true, $reorderLinks = true)
 	{
-		$this->prefereSelect = $prefereSelect;
+		$this->preferSelect = $preferSelect;
 		$this->reorderLinks = $reorderLinks;
 	}
 
-	function head()
+	/**
+	 * Prints HTML code inside <head>.
+	 * @return true
+	 */
+	public function head()
 	{
-
 		?>
 
 		<style>
@@ -43,26 +46,29 @@ class AdminerSimpleMenu
 
 		<?php
 
+		// Return true to allow linking of adminer.css.
+		return true;
 	}
 
 	/**
 	 * Prints table list in menu.
 	 *
-	 * @param array Table list.
-	 * @return null
+	 * @param array $tables Table list.
+	 * @return bool|null
 	 */
-	function tablesPrint($tables)
+	public function tablesPrint($tables)
 	{
-		if (defined("PMTN_ADMINER_THEME"))
+		if (defined("PMTN_ADMINER_THEME")) {
 			echo "<ul id='tables' class='simple'>\n";
-		else
+		} else {
 			echo "<ul id='tables' onmouseover='menuOver(this, event);' onmouseout='menuOut(this);' class='simple'>\n";
+		}
 
 		foreach ($tables as $table => $status) {
 			$name = Adminer::tableName($status);
 			$active = in_array($table, array($_GET["select"], $_GET["edit"], $_GET["table"], $_GET["create"], $_GET["indexes"], $_GET["foreign"], $_GET["trigger"]));
 
-			if ($this->prefereSelect) {
+			if ($this->preferSelect) {
 				$action = "select";
 				$title = "Select data";
 			} else {
@@ -71,7 +77,7 @@ class AdminerSimpleMenu
 			}
 
 			echo "<li>";
-			if ($this->prefereSelect || support("table") || support("indexes")) {
+			if ($this->preferSelect || support("table") || support("indexes")) {
 				echo '<a href="' . h(ME) . $action . '=' . urlencode($table) . '"' . bold($active, (is_view($status) ? "view" : "")) . " title='" . lang($title) . "'>$name</a>";
 			} else {
 				echo "<span>$name</span>";
@@ -81,51 +87,56 @@ class AdminerSimpleMenu
 
 		echo "</ul>\n";
 
-		return TRUE;
+		return true;
 	}
 
-	/**
+	/*
 	 * Prints links after select heading.
 	 *
-	 * @param array result of SHOW TABLE STATUS
-	 * @param string new item options, NULL for no new item
+	 * @param array $tableStatus Result of SHOW TABLE STATUS.
+	 * @param string $set New item options, NULL for no new item.
 	 *
-	 * @return null
+	 * @return bool|null
 	 */
-	function selectLinks($tableStatus, $set = "")
+	public function selectLinks($tableStatus, $set = "")
 	{
-		if (!$this->reorderLinks)
-			return;
+		if (!$this->reorderLinks) {
+			return null; // null has to be returned to force Adminer print original links.
+		}
 
 		echo '<p class="links">';
 
 		$links = array();
 
-		if ($this->prefereSelect)
+		if ($this->preferSelect) {
 			$links["select"] = lang('Select data');
-
-		if (support("table") || support("indexes"))
-			$links["table"] = lang('Show structure');
-
-		if (!$this->prefereSelect)
-			$links["select"] = lang('Select data');
-
-		if (support("table")) {
-			if (is_view($tableStatus))
-				$links["view"] = lang('Alter view');
-			else
-				$links["create"] = lang('Alter table');
 		}
 
-		if ($set !== null)
+		if (support("table") || support("indexes")) {
+			$links["table"] = lang('Show structure');
+		}
+
+		if (!$this->preferSelect) {
+			$links["select"] = lang('Select data');
+		}
+
+		if (support("table")) {
+			if (is_view($tableStatus)) {
+				$links["view"] = lang('Alter view');
+			} else {
+				$links["create"] = lang('Alter table');
+			}
+		}
+
+		if ($set !== null) {
 			$links["edit"] = lang('New item');
+		}
 
 		foreach ($links as $key => $val) {
 			echo " <a href='" . h(ME) . "$key=" . urlencode($tableStatus["Name"]) . ($key == "edit" ? $set : "") . "'" . bold(isset($_GET[$key])) . ">$val</a>";
 		}
 
 		echo "\n";
-
-		return FALSE;
+		return true;
 	}
 }
