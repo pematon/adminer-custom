@@ -7,13 +7,13 @@ BASEDIR=$( cd `dirname $0`/.. ; pwd )
 cd "$BASEDIR"
 
 # Master branch
-cp index.php ../adminer-custom-master
-cp adminer.php ../adminer-custom-master
+cp index.php ../adminer-custom
+cp adminer.php ../adminer-custom
 
-cp -r css ../adminer-custom-master
-cp -r fonts ../adminer-custom-master
-cp -r images ../adminer-custom-master
-cp -r plugins ../adminer-custom-master
+cp -r css ../adminer-custom
+cp -r fonts ../adminer-custom
+cp -r images ../adminer-custom
+cp -r plugins ../adminer-custom
 
 # Theme
 cp -r less/* ../adminer-theme/src
