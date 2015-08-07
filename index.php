@@ -10,8 +10,8 @@ function adminer_object()
 		include_once "./$filename";
 	}
 
+	// Specify enabled plugins here.
 	$plugins = array(
-		// specify enabled plugins here
 		new AdminerDatabaseHide(array("mysql", "information_schema", "performance_schema")),
 		new AdminerLoginServers(array(filter_input(INPUT_SERVER, 'SERVER_NAME'))),
 		new AdminerTheme(),
