@@ -11,13 +11,13 @@ class AdminerJsonPreview
 	const MAX_TEXT_LENGTH = 100;
 
 	/** @var int */
-	protected $maxLevel;
+	private $maxLevel;
 
 	/** @var bool */
-	protected $inTable;
+	private $inTable;
 
 	/** @var bool */
-	protected $inEdit;
+	private $inEdit;
 
 	/**
 	 * @param int $maxLevel Max. level in recursion. 0 means no limit.
@@ -33,7 +33,6 @@ class AdminerJsonPreview
 
 	/**
 	 * Prints HTML code inside <head>.
-	 * @return true
 	 */
 	public function head()
 	{
@@ -141,9 +140,6 @@ class AdminerJsonPreview
 		</script>
 
 		<?php
-
-		// Return true to allow linking of adminer.css.
-		return true;
 	}
 
 	public function selectVal(&$val, $link, $field, $original)

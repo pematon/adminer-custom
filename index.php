@@ -14,9 +14,12 @@ function adminer_object()
 	$plugins = array(
 		new AdminerDatabaseHide(array("mysql", "information_schema", "performance_schema")),
 		new AdminerLoginServers(array(filter_input(INPUT_SERVER, 'SERVER_NAME'))),
-		new AdminerTheme(),
 		new AdminerSimpleMenu(),
+		new AdminerCollations(array("utf8_general_ci", "utf8mb4_general_ci")),
 		new AdminerJsonPreview(),
+
+		// AdminerTheme has to be the last one.
+		new AdminerTheme(),
 	);
 
 	return new AdminerPlugin($plugins);
