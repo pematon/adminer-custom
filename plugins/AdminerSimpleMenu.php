@@ -12,10 +12,10 @@
 class AdminerSimpleMenu
 {
 	/** @var bool */
-	protected $preferSelect;
+	private $preferSelect;
 
 	/** @var bool */
-	protected $reorderLinks;
+	private $reorderLinks;
 
 	/**
 	 * @param bool $preferSelect Whether to prefer table selection before editing structure.
@@ -29,7 +29,6 @@ class AdminerSimpleMenu
 
 	/**
 	 * Prints HTML code inside <head>.
-	 * @return true
 	 */
 	public function head()
 	{
@@ -45,9 +44,6 @@ class AdminerSimpleMenu
 		</style>
 
 		<?php
-
-		// Return true to allow linking of adminer.css.
-		return true;
 	}
 
 	/**
