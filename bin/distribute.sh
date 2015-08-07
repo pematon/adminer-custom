@@ -26,3 +26,4 @@ cp plugins/AdminerTheme.php ../adminer-theme/lib/plugins
 # Plugins
 cp plugins/AdminerJsonPreview.php ../adminer-plugins
 cp plugins/AdminerSimpleMenu.php ../adminer-plugins
+cp plugins/AdminerCollations.php ../adminer-plugins
