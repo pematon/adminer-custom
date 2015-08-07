@@ -1,8 +1,7 @@
 <?php
 
 /**
- * Adds support for mobile devices.
- * This includes meta headers, touch icons and other stuff related to Pematon's custom theme.
+ * Custom character sets in collation select boxes.
  *
  * @author Peter Knut
  * @copyright 2015 Pematon, s.r.o. (http://www.pematon.com/)

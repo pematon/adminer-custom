@@ -7,7 +7,7 @@
  * Optimize your workflow!
  *
  * @author Peter Knut
- * @copyright 2014 Pematon, s.r.o. (http://www.pematon.com/)
+ * @copyright 2014-2015 Pematon, s.r.o. (http://www.pematon.com/)
  */
 class AdminerSimpleMenu
 {

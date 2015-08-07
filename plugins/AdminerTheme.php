@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Adds support for mobile devices.
- * This includes meta headers, touch icons and other stuff related to Pematon's custom theme.
+ * Adds support for Pematon's custom theme.
+ * This includes meta headers, touch icons and other stuff.
  *
  * @author Peter Knut
  * @copyright 2014-2015 Pematon, s.r.o. (http://www.pematon.com/)
