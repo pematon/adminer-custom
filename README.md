@@ -7,6 +7,3 @@ It contains [responsive touch-friendly theme](https://github.com/pematon/adminer
 
 ## How to use
 Just download whole package to public directory on your web server. Optionally you can configure plugins in index.php.
-
-## References
-Amazing **Entypo** pictograms are created by Daniel Bruce ([www.entypo.com](http://www.entypo.com/)).
