@@ -21,7 +21,7 @@ class AdminerSimpleMenu
      * @param bool $preferSelect Whether to prefer table selection before editing structure.
      * @param bool $reorderLinks Whether links above data table will be reordered to reflect workflow priority.
      */
-    public function AdminerSimpleMenu($preferSelect = true, $reorderLinks = true)
+    public function __construct($preferSelect = true, $reorderLinks = true)
     {
         $this->preferSelect = $preferSelect;
         $this->reorderLinks = $reorderLinks;

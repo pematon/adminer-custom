@@ -15,7 +15,7 @@ class AdminerTheme
     /**
      * @param string $themeName File with this name and .css extension should be located in css folder.
      */
-    function AdminerTheme($themeName = "default-orange")
+    function __construct($themeName = "default-orange")
     {
         define("PMTN_ADMINER_THEME", true);
 

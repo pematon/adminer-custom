@@ -24,7 +24,7 @@ class AdminerJsonPreview
      * @param bool $inTable Whether apply JSON preview in selection table.
      * @param bool $inEdit Whether apply JSON preview in edit form.
      */
-    public function AdminerJsonPreview($maxLevel = 0, $inTable = true, $inEdit = true)
+    public function __construct($maxLevel = 0, $inTable = true, $inEdit = true)
     {
         $this->maxLevel = $maxLevel;
         $this->inTable = $inTable;
