@@ -4,7 +4,7 @@
  * Custom character sets in collation select boxes.
  *
  * @author Peter Knut
- * @copyright 2015 Pematon, s.r.o. (http://www.pematon.com/)
+ * @copyright 2015-2017 Pematon, s.r.o. (http://www.pematon.com/)
  */
 class AdminerCollations
 {

@@ -4,7 +4,7 @@
  * Displays JSON preview as a table.
  *
  * @author Peter Knut
- * @copyright 2014-2015 Pematon, s.r.o. (http://www.pematon.com/)
+ * @copyright 2014-2017 Pematon, s.r.o. (http://www.pematon.com/)
  */
 class AdminerJsonPreview
 {
