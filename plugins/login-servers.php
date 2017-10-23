@@ -1,8 +1,8 @@
 <?php
 
 /** Display constant list of servers in login form
-* @link http://www.adminer.org/plugins/#use
-* @author Jakub Vrana, http://www.vrana.cz/
+* @link https://www.adminer.org/plugins/#use
+* @author Jakub Vrana, https://www.vrana.cz/
 * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
 * @license http://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, version 2 (one or other)
 */
@@ -14,7 +14,7 @@ class AdminerLoginServers {
 	* @param array array($domain) or array($domain => $description) or array($category => array())
 	* @param string
 	*/
-	function AdminerLoginServers($servers, $driver = "server") {
+	function __construct($servers, $driver = "server") {
 		$this->servers = $servers;
 		$this->driver = $driver;
 	}
@@ -49,4 +49,3 @@ class AdminerLoginServers {
 	}
 	
 }
-
