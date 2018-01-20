@@ -90,7 +90,7 @@ class AdminerJsonPreview
                 display: inline-block;
                 padding: 0;
                 overflow: hidden;
-                background-image: url("index.php?file=down.gif");
+                background-image: url("<?php echo ME; ?>file=down.gif");
                 background-position: center center;
                 background-repeat: no-repeat;
                 text-indent: -50px;
@@ -110,7 +110,7 @@ class AdminerJsonPreview
             }
 
             a.json-icon.json-up {
-                background-image: url("index.php?file=up.gif");
+                background-image: url("<?php echo ME; ?>file=up.gif");
             }
 
             /* No javascript support */
