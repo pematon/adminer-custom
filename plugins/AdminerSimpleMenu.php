@@ -7,7 +7,7 @@
  * Optimize your workflow!
  *
  * @author Peter Knut
- * @copyright 2014-2017 Pematon, s.r.o. (http://www.pematon.com/)
+ * @copyright 2014-2018 Pematon, s.r.o. (http://www.pematon.com/)
  */
 class AdminerSimpleMenu
 {
@@ -57,7 +57,7 @@ class AdminerSimpleMenu
         if (defined("PMTN_ADMINER_THEME")) {
             echo "<ul id='tables' class='simple'>\n";
         } else {
-            echo "<ul id='tables' onmouseover='menuOver(this, event);' onmouseout='menuOut(this);' class='simple'>\n";
+            echo "<ul id='tables' class='simple'>" . script("mixin(qs('#tables'), {onmouseover: menuOver, onmouseout: menuOut});");
         }
 
         foreach ($tables as $table => $status) {
