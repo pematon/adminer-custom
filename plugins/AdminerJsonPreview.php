@@ -46,6 +46,7 @@ class AdminerJsonPreview
                 border-spacing: 0;
                 margin: 4px 0;
                 border: 1px solid #999;
+                font-size: 110%;
             }
 
             .json tr {
@@ -209,12 +210,14 @@ class AdminerJsonPreview
                 $value .= "<code class='jush-js'>" . h(preg_replace('/([,:])([^\s])/', '$1 $2', json_encode($val))) . "</code>";
             } elseif (is_string($val)) {
                 // Shorten string to max. length.
-                if (mb_strlen($val, "UTF-8") > self::MAX_TEXT_LENGTH)
+                if (mb_strlen($val, "UTF-8") > self::MAX_TEXT_LENGTH) {
                     $val = mb_substr($val, 0, self::MAX_TEXT_LENGTH - 3, "UTF-8") . "...";
+                }
 
                 // Add extra new line to make it visible in HTML output.
-                if (preg_match("@\n$@", $val))
+                if (preg_match("@\n$@", $val)) {
                     $val .= "\n";
+                }
 
                 $value .= "<code>" . nl2br(h($val)) . "</code>";
             } elseif (is_bool($val)) {
