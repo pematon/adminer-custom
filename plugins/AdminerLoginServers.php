@@ -3,6 +3,8 @@
 
 /**
  * Displays constant list of servers in login form.
+ * Configuration is similar to the original "login-servers" plugin but – the killer feature – each server can have
+ * a different driver!
  *
  * @link https://github.com/pematon/adminer-plugins
  *
@@ -26,7 +28,8 @@ class AdminerLoginServers
     /**
      * Sets lists of supported database servers.
      * Database server can be prefixed with driver name. For example: mysql://localhost:3306
-     * Default driver is `mysql`.
+     * Possible driver names are: `sqlite`, `sqlite2`, `pgsql`, `firebird`, `oracle`, `simpledb`, `elastic`, `mysql`,
+     * `mongo`, `mssql`. Default driver is `mysql`.
      *
      * @param array $servers array(database-server) or array(database-server => description) or array(category => array())
      * @param string $defaultDriver Will be used if driver is not specified within server.
