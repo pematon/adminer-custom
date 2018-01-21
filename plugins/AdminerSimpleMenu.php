@@ -62,7 +62,7 @@ class AdminerSimpleMenu
 
         foreach ($tables as $table => $status) {
             $name = Adminer::tableName($status);
-            $active = in_array($table, array($_GET["select"], $_GET["edit"], $_GET["table"], $_GET["create"], $_GET["indexes"], $_GET["foreign"], $_GET["trigger"]));
+            $active = in_array($table, [$_GET["select"], $_GET["edit"], $_GET["table"], $_GET["create"], $_GET["indexes"], $_GET["foreign"], $_GET["trigger"]]);
 
             if ($this->preferSelect) {
                 $action = "select";
@@ -102,7 +102,7 @@ class AdminerSimpleMenu
 
         echo '<p class="links">';
 
-        $links = array();
+        $links = [];
 
         if ($this->preferSelect) {
             $links["select"] = lang('Select data');
