@@ -184,8 +184,8 @@ class AdminerJsonPreview
             return;
         }
 
-        if (is_string($value) && substr($value, 0, 1) == '{' && ($json = json_decode($value, true))) {
-            echo "<a class='icon json-icon json-link' href='#' onclick='toggleJson(this, $counter);return false;' title='JSON'><span>JSON</span></a><br/>";
+        if (is_string($value) && in_array(substr($value, 0, 1), ['{', '[']) && ($json = json_decode($value, true))) {
+            echo "<a class='icon json-icon json-link' href='#' title='JSON' data-index='$counter'><span>JSON</span></a><br/>";
             echo $this->convertJson($json, 1, $counter);
         }
     }
