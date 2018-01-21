@@ -3,6 +3,8 @@
 /**
  * Custom character sets in collation select boxes.
  *
+ * @link https://github.com/pematon/adminer-plugins
+ *
  * @author Peter Knut
  * @copyright 2015-2018 Pematon, s.r.o. (http://www.pematon.com/)
  */

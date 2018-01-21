@@ -3,6 +3,8 @@
 /**
  * Displays JSON preview as a table.
  *
+ * @link https://github.com/pematon/adminer-plugins
+ *
  * @author Peter Knut
  * @copyright 2014-2018 Pematon, s.r.o. (http://www.pematon.com/)
  */
