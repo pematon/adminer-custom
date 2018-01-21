@@ -17,7 +17,7 @@ function adminer_object()
             filter_input(INPUT_SERVER, 'HTTP_HOST') => filter_input(INPUT_SERVER, 'SERVER_NAME')
         ]),
         new AdminerSimpleMenu(),
-        new AdminerCollations(["utf8mb4_general_ci", "ascii_general_ci"]),
+        new AdminerCollations(),
         new AdminerJsonPreview(),
 
         // AdminerTheme has to be the last one.
