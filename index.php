@@ -11,16 +11,18 @@ function adminer_object()
     }
 
     // Specify enabled plugins here.
-    $plugins = array(
-        new AdminerDatabaseHide(array("mysql", "information_schema", "performance_schema")),
-        new AdminerLoginServers(array(filter_input(INPUT_SERVER, 'SERVER_NAME'))),
+    $plugins = [
+        new AdminerDatabaseHide(["mysql", "information_schema", "performance_schema"]),
+        new AdminerLoginServers([
+            filter_input(INPUT_SERVER, 'HTTP_HOST') => filter_input(INPUT_SERVER, 'SERVER_NAME')
+        ]),
         new AdminerSimpleMenu(),
-        new AdminerCollations(array("utf8mb4_general_ci", "ascii_general_ci")),
+        new AdminerCollations(["utf8mb4_general_ci", "ascii_general_ci"]),
         new AdminerJsonPreview(),
 
         // AdminerTheme has to be the last one.
         new AdminerTheme(),
-    );
+    ];
 
     return new AdminerPlugin($plugins);
 }
