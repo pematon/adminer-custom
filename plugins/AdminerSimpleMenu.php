@@ -6,6 +6,8 @@
  * Get rid of schizophrenic decisions between selecting data and showing table structure.
  * Optimize your workflow!
  *
+ * @link https://github.com/pematon/adminer-plugins
+ *
  * @author Peter Knut
  * @copyright 2014-2018 Pematon, s.r.o. (http://www.pematon.com/)
  */

@@ -4,6 +4,8 @@
  * Adds support for Pematon's custom theme.
  * This includes meta headers, touch icons and other stuff.
  *
+ * @link https://github.com/pematon/adminer-theme
+ *
  * @author Peter Knut
  * @copyright 2014-2018 Pematon, s.r.o. (http://www.pematon.com/)
  */
@@ -19,11 +21,11 @@ class AdminerTheme
      * @param string $defaultTheme Theme name of default theme.
      * @param array $themes array(database-host => theme-name).
      */
-    function __construct($defaultTheme = "default-orange", array $themes = [])
+    public function __construct($defaultTheme = "default-orange", array $themes = [])
     {
         define("PMTN_ADMINER_THEME", true);
 
-        $this->themeName = isset($themes[SERVER]) ? $themes[SERVER] : $defaultTheme;
+        $this->themeName = isset($_GET["username"]) && isset($themes[SERVER]) ? $themes[SERVER] : $defaultTheme;
     }
 
     /**

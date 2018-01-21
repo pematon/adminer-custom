@@ -3,6 +3,8 @@
 /**
  * Custom character sets in collation select boxes.
  *
+ * @link https://github.com/pematon/adminer-plugins
+ *
  * @author Peter Knut
  * @copyright 2015-2018 Pematon, s.r.o. (http://www.pematon.com/)
  */
@@ -14,7 +16,7 @@ class AdminerCollations
     /**
      * @param array $characterSets Array of allowed character sets.
      */
-    function __construct(array $characterSets = ["utf8mb4_general_ci", "ascii_general_ci"])
+    public function __construct(array $characterSets = ["utf8mb4_general_ci", "ascii_general_ci"])
     {
         $this->characterSets = $characterSets;
     }
