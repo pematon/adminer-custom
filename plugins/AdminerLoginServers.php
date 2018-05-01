@@ -3,6 +3,7 @@
 
 /**
  * Displays constant list of servers in login form.
+ *
  * Configuration is similar to the original "login-servers" plugin but – the killer feature – each server can have
  * a different driver!
  *
@@ -23,11 +24,18 @@ class AdminerLoginServers
     private $defaultDriver;
 
     /** @var array */
-    private $drivers;
+    private $loginParams;
 
     /**
      * Sets lists of supported database servers.
-     * Database server can be prefixed with driver name. For example: mysql://localhost:3306
+     *
+     * Database server can be prefixed with driver name and can contain port and database name.
+     * For example:
+     * - mysql://localhost:3306 (server host and port)
+     * - pgsql://localhost#database_name (server and database name)
+     * - sqlite://database.db (relative path to database file)
+     * - sqlite:///var/www/#database.db (absolute path as 'server' and file name as 'database')
+     *
      * Possible driver names are: `sqlite`, `sqlite2`, `pgsql`, `firebird`, `oracle`, `simpledb`, `elastic`, `mysql`,
      * `mongo`, `mssql`. Default driver is `mysql`.
      *
@@ -39,9 +47,9 @@ class AdminerLoginServers
         $this->defaultDriver = $this->sanitizeDriver($defaultDriver);
 
         $this->servers = [];
-        $this->drivers = [];
+        $this->loginParams = [];
 
-        $this->parseServers($servers, $this->servers, $this->drivers);
+        $this->parseServers($servers, $this->servers, $this->loginParams);
     }
 
     /**
@@ -54,22 +62,11 @@ class AdminerLoginServers
      */
     public function login($login, $password)
     {
-        return $this->checkServer($this->servers, SERVER);
-    }
-
-    private function parseServers(array $servers, array &$out, array &$drivers)
-    {
-        foreach ($servers as $key => $value) {
-            if (is_array($value)) {
-                $out[$key] = [];
-                $this->parseServers($value, $out[$key], $drivers);
-            } else {
-                list($driver, $server) = $this->parseServer(is_string($key) ? $key : $value);
-
-                $out[$server] = $value;
-                $drivers[$server] = $driver;
-            }
+        if (!$this->checkServer($this->servers, SERVER)) {
+            return false;
         }
+
+        return true;
     }
 
     private function checkServer(array $servers, $server)
@@ -89,18 +86,43 @@ class AdminerLoginServers
         return false;
     }
 
-    private function parseServer($server)
+    private function parseServers(array $servers, array &$out, array &$loginParams)
+    {
+        foreach ($servers as $key => $value) {
+            if (is_array($value)) {
+                $out[$key] = [];
+                $this->parseServers($value, $out[$key], $loginParams);
+            } else {
+                $this->parseServer(is_string($key) ? $key : $value, $params);
+
+                $out[$params["server"]] = $value;
+                $loginParams[$params["server"]] = $params;
+            }
+        }
+    }
+
+    private function parseServer($server, &$params)
     {
         $matches = [];
-        preg_match('@^(([^:]+)://)?(.+)$@', $server, $matches);
+        preg_match('@^(([^:]+)://)?([^#]+)(#(.*))?$@', $server, $matches);
 
         $driver = $matches[2];
         $server = $matches[3];
+        $database = isset($matches[5]) ? $matches[5] : "";
 
         // Default driver is 'server'. It is used also for MySQL.
         $driver = $driver == "" ? $this->defaultDriver : $this->sanitizeDriver($driver);
 
-        return [$driver, $server];
+        if (($driver == "sqlite" || $driver == "sqlite2") && $database == "") {
+            $database = $server;
+            $server = "";
+        }
+
+        $params = [
+            "driver" => $driver,
+            "server" => $server,
+            "database" => $database,
+        ];
     }
 
     private function sanitizeDriver($driver)
@@ -135,17 +157,18 @@ class AdminerLoginServers
         ?>
 
         <input type="hidden" name="auth[driver]" value="">
+        <input type="hidden" name="auth[db]" value="">
 
         <script <?php echo nonce(); ?>>
             (function(document) {
                 "use strict";
 
-                var servers = {
+                var loginParams = {
                     <?php
-                    $count = count($this->drivers);
+                    $count = count($this->loginParams);
                     $i = 1;
-                    foreach ($this->drivers as $server => $driver) {
-                        echo "'$server': '$driver'";
+                    foreach ($this->loginParams as $server => $params) {
+                        echo "'$server': { 'driver': '" . $params["driver"] . "', 'database': '" . $params["database"] . "' }";
                         if ($i++ < $count) {
                             echo ",";
                         }
@@ -155,6 +178,7 @@ class AdminerLoginServers
 
                 var serverSelect = document.querySelector("select[name='auth[server]']");
                 var driverInput = document.querySelector("input[name='auth[driver]']");
+                var databaseInput = document.querySelector("input[name='auth[db]']");
 
                 serverSelect.addEventListener("change", changeServer, false);
                 changeServer();
@@ -162,7 +186,8 @@ class AdminerLoginServers
                 function changeServer() {
                     var server = serverSelect.options[serverSelect.selectedIndex].value;
 
-                    driverInput.value = servers[server];
+                    driverInput.value = loginParams[server].driver;
+                    databaseInput.value = loginParams[server].database;
                 }
             })(document);
         </script>
