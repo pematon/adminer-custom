@@ -33,8 +33,8 @@ class AdminerLoginServers
      * For example:
      * - mysql://localhost:3306 (server host and port)
      * - pgsql://localhost#database_name (server and database name)
-     * - sqlite://database.db (relative path to database file)
-     * - sqlite:///var/www/#database.db (absolute path as 'server' and file name as 'database')
+     * - sqlite://database.db (relative path to database file, no authentication)
+     * - sqlite://user:password@/var/www/#database.db (authentication, absolute path as 'server' and file name as 'database')
      *
      * Possible driver names are: `sqlite`, `sqlite2`, `pgsql`, `firebird`, `oracle`, `simpledb`, `elastic`, `mysql`,
      * `mongo`, `mssql`. Default driver is `mysql`.
@@ -54,31 +54,43 @@ class AdminerLoginServers
 
     /**
      * Checks whether current server is in a list of supported servers.
+     * For SQLite database, verify also user name and password.
      *
-     * @param string $login
+     * @param string $username
      * @param string $password
      *
      * @return bool
      */
-    public function login($login, $password)
+    public function login($username, $password)
     {
-        if (!$this->checkServer($this->servers, SERVER)) {
+        $params = $this->checkServer($this->servers, SERVER, DB);
+        if (!$params) {
             return false;
+        }
+
+        if ($this->isSQLite($params["driver"])) {
+            return $username == $params["username"] && password_verify($password, $params["password"]);
         }
 
         return true;
     }
 
-    private function checkServer(array $servers, $server)
+    private function checkServer(array $servers, $server, $database)
     {
         foreach ($servers as $key => $value) {
             if (is_array($value)) {
-                if ($this->checkServer($value, $server)) {
-                    return true;
+                if ($params = $this->checkServer($value, $server, $database)) {
+                    return $params;
                 }
             } else {
-                if ($key == $server) {
-                    return true;
+                if ($key != $server) {
+                    continue;
+                }
+
+                $params = $this->loginParams[$key];
+
+                if (!$this->isSQLite($params["driver"]) || $params["database"] == $database) {
+                    return $params;
                 }
             }
         }
@@ -95,7 +107,10 @@ class AdminerLoginServers
             } else {
                 $this->parseServer(is_string($key) ? $key : $value, $params);
 
-                $out[$params["server"]] = $value;
+                $out[$params["server"]] = "(" . $this->formatDriver($params["driver"]) . ") " .
+                    $params["server"] .
+                    ($params["database"] ? " » " . $params["database"] : "");
+
                 $loginParams[$params["server"]] = $params;
             }
         }
@@ -104,30 +119,62 @@ class AdminerLoginServers
     private function parseServer($server, &$params)
     {
         $matches = [];
-        preg_match('@^(([^:]+)://)?([^#]+)(#(.*))?$@', $server, $matches);
+        preg_match('~^(([^:]+)://)?(([^:@]+)(:([^@]+)?)?@)?([^#]+)(#(.*))?$~', $server, $matches);
 
         $driver = $matches[2];
-        $server = $matches[3];
-        $database = isset($matches[5]) ? $matches[5] : "";
+        $username = $matches[4];
+        $password = $matches[6];
+        $server = $matches[7];
+        $database = isset($matches[9]) ? $matches[9] : "";
 
         // Default driver is 'server'. It is used also for MySQL.
         $driver = $driver == "" ? $this->defaultDriver : $this->sanitizeDriver($driver);
 
-        if (($driver == "sqlite" || $driver == "sqlite2") && $database == "") {
+        $sqlite = $this->isSQLite($driver);
+        if ($sqlite && $database == "") {
             $database = $server;
             $server = "";
         }
 
+        if (!$sqlite && $username != "") {
+            throw new InvalidArgumentException("User name and password in server URI can be used only with 'sqlite' and 'sqlite2' drivers.");
+        }
+
         $params = [
             "driver" => $driver,
+            "username" => $username,
+            "password" => password_hash($password, PASSWORD_DEFAULT),
             "server" => $server,
             "database" => $database,
         ];
     }
 
+    private function isSQLite($driver)
+    {
+        return $driver == "sqlite" || $driver == "sqlite2";
+    }
+
     private function sanitizeDriver($driver)
     {
         return $driver == "mysql" ? "server" : $driver;
+    }
+
+    private function formatDriver($driver)
+    {
+        static $drivers = [
+            "server" => "MySQL",
+            "sqlite" => "SQLite 3",
+            "sqlite2" => "SQLite 2",
+            "pgsql" => "PostgreSQL",
+            "oracle" => "Oracle",
+            "mssql" => "MS SQL",
+            "firebird" => "Firebird",
+            "simpledb" => "SimpleDB",
+            "mongo" => "MongoDB",
+            "elastic" => "Elasticsearch",
+        ];
+
+        return isset($drivers[$driver]) ? $drivers[$driver] : $driver;
     }
 
     public function loginForm()
