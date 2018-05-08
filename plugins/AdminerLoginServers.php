@@ -53,6 +53,21 @@ class AdminerLoginServers
     }
 
     /**
+     * @return array
+     */
+    public function credentials() {
+        $params = $this->getLoginParams(DRIVER, SERVER, DB);
+
+        if ($params && $this->isSQLite($params["driver"])) {
+            $password = "";
+        } else {
+            $password = get_password();
+        }
+
+        return [SERVER, $_GET["username"], $password];
+    }
+
+    /**
      * Checks whether current server is in a list of supported servers.
      * For SQLite database, verify also user name and password.
      *
@@ -63,7 +78,7 @@ class AdminerLoginServers
      */
     public function login($username, $password)
     {
-        $params = $this->checkServer($this->servers, SERVER, DB);
+        $params = $this->getLoginParams(DRIVER, SERVER, DB);
         if (!$params) {
             return false;
         }
@@ -75,29 +90,24 @@ class AdminerLoginServers
         return true;
     }
 
-    private function checkServer(array $servers, $server, $database)
+    /**
+     * @param string $driver
+     * @param string $server
+     * @param string $database
+     * @return array|null
+     */
+    private function getLoginParams($driver, $server, $database)
     {
-        foreach ($servers as $key => $value) {
-            if (is_array($value)) {
-                if ($params = $this->checkServer($value, $server, $database)) {
-                    return $params;
-                }
-            } else {
-                if ($key != $server) {
-                    continue;
-                }
+        $serverKey = $this->getServerKey($driver, $server, $database);
 
-                $params = $this->loginParams[$key];
-
-                if (!$this->isSQLite($params["driver"]) || $params["database"] == $database) {
-                    return $params;
-                }
-            }
-        }
-
-        return false;
+        return isset($this->loginParams[$serverKey]) ? $this->loginParams[$serverKey] : null;
     }
 
+    /**
+     * @param array $servers
+     * @param array $out
+     * @param array $loginParams
+     */
     private function parseServers(array $servers, array &$out, array &$loginParams)
     {
         foreach ($servers as $key => $value) {
@@ -105,18 +115,25 @@ class AdminerLoginServers
                 $out[$key] = [];
                 $this->parseServers($value, $out[$key], $loginParams);
             } else {
+                $params = [];
                 $this->parseServer(is_string($key) ? $key : $value, $params);
 
-                $out[$params["server"]] = "(" . $this->formatDriver($params["driver"]) . ") " .
+                $serverKey = $this->getServerKey($params["driver"], $params["server"], $params["database"]);
+
+                $out[$serverKey] = "(" . $this->formatDriver($params["driver"]) . ") " .
                     $params["server"] .
                     ($params["database"] ? " » " . $params["database"] : "");
 
-                $loginParams[$params["server"]] = $params;
+                $loginParams[$serverKey] = $params;
             }
         }
     }
 
-    private function parseServer($server, &$params)
+    /**
+     * @param string $server
+     * @param array $params
+     */
+    private function parseServer($server, array &$params)
     {
         $matches = [];
         preg_match('~^(([^:]+)://)?(([^:@]+)(:([^@]+)?)?@)?([^#]+)(#(.*))?$~', $server, $matches);
@@ -149,16 +166,39 @@ class AdminerLoginServers
         ];
     }
 
+    /**
+     * @param string $driver
+     * @param string $server
+     * @param string $database
+     * @return string
+     */
+    private function getServerKey($driver, $server, $database)
+    {
+        return $this->isSQLite($driver) ? $server . "#" . $database : $server;
+    }
+
+    /**
+     * @param string $driver
+     * @return bool
+     */
     private function isSQLite($driver)
     {
         return $driver == "sqlite" || $driver == "sqlite2";
     }
 
+    /**
+     * @param string $driver
+     * @return string
+     */
     private function sanitizeDriver($driver)
     {
         return $driver == "mysql" ? "server" : $driver;
     }
 
+    /**
+     * @param string $driver
+     * @return string
+     */
     private function formatDriver($driver)
     {
         static $drivers = [
@@ -177,6 +217,9 @@ class AdminerLoginServers
         return isset($drivers[$driver]) ? $drivers[$driver] : $driver;
     }
 
+    /**
+     * @return bool
+     */
     public function loginForm()
     {
         ?>
@@ -185,7 +228,7 @@ class AdminerLoginServers
             <tr>
                 <th><?php echo lang('Server'); ?></th>
                 <td>
-                    <select name="auth[server]"><?php echo optionlist($this->servers, SERVER); ?></select>
+                    <select name="auth[serverDb]"><?php echo optionlist($this->servers, $this->getServerKey(DRIVER, SERVER, DB)); ?></select>
                 </td>
             <tr>
                 <th><?php echo lang('Username'); ?></th>
@@ -203,6 +246,7 @@ class AdminerLoginServers
         echo checkbox("auth[permanent]", 1, $_COOKIE["adminer_permanent"], lang('Permanent login')) . "\n";
         ?>
 
+        <input type="hidden" name="auth[server]" value="">
         <input type="hidden" name="auth[driver]" value="">
         <input type="hidden" name="auth[db]" value="">
 
@@ -214,8 +258,11 @@ class AdminerLoginServers
                     <?php
                     $count = count($this->loginParams);
                     $i = 1;
-                    foreach ($this->loginParams as $server => $params) {
-                        echo "'$server': { 'driver': '" . $params["driver"] . "', 'database': '" . $params["database"] . "' }";
+                    foreach ($this->loginParams as $serverKey => $params) {
+                        echo "'$serverKey': { 'driver': '" . $params["driver"] .
+                            "',  'server': '" . $params["server"] .
+                            "', 'database': '" . $params["database"] . "' }";
+
                         if ($i++ < $count) {
                             echo ",";
                         }
@@ -223,18 +270,20 @@ class AdminerLoginServers
                     ?>
                 };
 
-                var serverSelect = document.querySelector("select[name='auth[server]']");
+                var serverDbSelect = document.querySelector("select[name='auth[serverDb]']");
                 var driverInput = document.querySelector("input[name='auth[driver]']");
+                var serverInput = document.querySelector("input[name='auth[server]']");
                 var databaseInput = document.querySelector("input[name='auth[db]']");
 
-                serverSelect.addEventListener("change", changeServer, false);
+                serverDbSelect.addEventListener("change", changeServer, false);
                 changeServer();
 
                 function changeServer() {
-                    var server = serverSelect.options[serverSelect.selectedIndex].value;
+                    var serverKey = serverDbSelect.options[serverDbSelect.selectedIndex].value;
 
-                    driverInput.value = loginParams[server].driver;
-                    databaseInput.value = loginParams[server].database;
+                    driverInput.value = loginParams[serverKey].driver;
+                    serverInput.value = loginParams[serverKey].server;
+                    databaseInput.value = loginParams[serverKey].database;
                 }
             })(document);
         </script>
