@@ -52,6 +52,18 @@ class AdminerLoginServers
         $this->parseServers($servers, $this->servers, $this->loginParams);
     }
 
+    function credentials() {
+        $params = $this->checkServer($this->servers, SERVER, DB);
+
+        if ($params && $this->isSQLite($params["driver"])) {
+            $password = "";
+        } else {
+            $password = get_password();
+        }
+
+        return [SERVER, $_GET["username"], $password];
+    }
+
     /**
      * Checks whether current server is in a list of supported servers.
      * For SQLite database, verify also user name and password.
