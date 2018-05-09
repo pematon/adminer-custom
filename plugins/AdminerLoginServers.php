@@ -287,9 +287,9 @@ class AdminerLoginServers
                     $count = count($this->loginParams);
                     $i = 1;
                     foreach ($this->loginParams as $serverKey => $params) {
-                        echo "'$serverKey': { 'driver': '" . $params["driver"] .
-                            "',  'server': '" . $params["server"] .
-                            "', 'database': '" . $params["database"] . "' }";
+                        echo json_encode($serverKey) . ": { 'driver': " . json_encode($params["driver"]) .
+                            ",  'server': " . json_encode($params["server"]) .
+                            ", 'database': " . json_encode($params["database"]) . " }";
 
                         if ($i++ < $count) {
                             echo ",";
