@@ -115,14 +115,23 @@ class AdminerLoginServers
                 $out[$key] = [];
                 $this->parseServers($value, $out[$key], $loginParams);
             } else {
+                if (is_string($key)) {
+                    $server = $key;
+                    $name = $value;
+                } else {
+                    $server = $value;
+                    $name = null;
+                }
+
                 $params = [];
-                $this->parseServer(is_string($key) ? $key : $value, $params);
+                $this->parseServer($server, $params);
 
                 $serverKey = $this->getServerKey($params["driver"], $params["server"], $params["database"]);
+                if (!$name) {
+                    $name = $this->getServerName($params);
+                }
 
-                $out[$serverKey] = "(" . $this->formatDriver($params["driver"]) . ") " .
-                    $params["server"] .
-                    ($params["database"] ? " » " . $params["database"] : "");
+                $out[$serverKey] = "(" . $this->formatDriver($params["driver"]) . ") " . $name;
 
                 $loginParams[$serverKey] = $params;
             }
@@ -175,6 +184,25 @@ class AdminerLoginServers
     private function getServerKey($driver, $server, $database)
     {
         return $this->isSQLite($driver) ? $server . "#" . $database : $server;
+    }
+
+    /**
+     * @param array $params
+     *
+     * @return string
+     */
+    private function getServerName(array $params)
+    {
+        $name = $params["server"];
+
+        if ($params["server"] && $params["database"]) {
+            $name .= " » ";
+        }
+        if ($params["database"]) {
+            $name .= $params["database"];
+        }
+
+        return $name;
     }
 
     /**
@@ -259,9 +287,9 @@ class AdminerLoginServers
                     $count = count($this->loginParams);
                     $i = 1;
                     foreach ($this->loginParams as $serverKey => $params) {
-                        echo "'$serverKey': { 'driver': '" . $params["driver"] .
-                            "',  'server': '" . $params["server"] .
-                            "', 'database': '" . $params["database"] . "' }";
+                        echo json_encode($serverKey) . ": { 'driver': " . json_encode($params["driver"]) .
+                            ",  'server': " . json_encode($params["server"]) .
+                            ", 'database': " . json_encode($params["database"]) . " }";
 
                         if ($i++ < $count) {
                             echo ",";
