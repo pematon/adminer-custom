@@ -16,6 +16,7 @@ function adminer_object()
         new AdminerLoginServers([
             filter_input(INPUT_SERVER, 'HTTP_HOST') => filter_input(INPUT_SERVER, 'SERVER_NAME')
         ]),
+        new AdminerTablesFilter(),
         new AdminerSimpleMenu(),
         new AdminerCollations(),
         new AdminerJsonPreview(),
