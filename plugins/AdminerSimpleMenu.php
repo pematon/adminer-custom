@@ -74,11 +74,11 @@ class AdminerSimpleMenu
                 $title = "Show structure";
             }
 
-            echo "<li>";
+            echo "<li data-table-name='$name'>";
             if ($this->preferSelect || support("table") || support("indexes")) {
-                echo '<a href="' . h(ME) . $action . '=' . urlencode($table) . '"' . bold($active, (is_view($status) ? "view" : "")) . " title='" . lang($title) . "'>$name</a>";
+                echo '<a href="' . h(ME) . $action . '=' . urlencode($table) . '"' . bold($active, (is_view($status) ? "view" : "")) . " title='" . lang($title) . "' data-link='main'>$name</a>";
             } else {
-                echo "<span>$name</span>";
+                echo "<span data-link='main'>$name</span>";
             }
             echo "</li>\n";
         }

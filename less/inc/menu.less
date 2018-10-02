@@ -51,22 +51,9 @@ h1 {
     background: @bgColor;
     z-index: 100;
 
-    #dbs {
-        border-top: 1px solid @blockBorderColor;
-        border-bottom: none;
+    p {
         padding: 10px;
-        background: @blockBgColor;
-        color: @blockBgColor;
-        font-size: 0;
-    }
-
-    #dbs span {
-        font-size: 0;
-    }
-
-    #dbs select {
-        margin: 0;
-        width: 100%;
+        border-bottom: none;
     }
 
     .links {
@@ -75,18 +62,23 @@ h1 {
         padding: 0 10px 7px 10px;
     }
 
-    #tables, #logins {
-        border-bottom: 1px solid @blockBorderColor;
-        padding: 0;
-        margin-bottom: 25px;
-    }
-
     .message {
         background: transparent;
         border: none;
         border-bottom: 1px solid @blockBorderColor;
         color: @note2Color;
     }
+}
+
+#filter-field {
+    margin: 0;
+    width: 100%;
+}
+
+.menu-list {
+    border-bottom: 1px solid @blockBorderColor;
+    padding: 0;
+    margin-bottom: 25px;
 }
 
 .menu-link {
@@ -109,13 +101,35 @@ h1 {
     }
 }
 
+p#dbs {
+    border-top: 1px solid @blockBorderColor;
+    background: @blockBgColor;
+    color: @blockBgColor;
+    font-size: 0;
+
+    span {
+        font-size: 0;
+    }
+
+    select {
+        margin: 0;
+        width: 100%;
+    }
+}
+
 #tables {
+    .menu-list();
+
     li {
         position: relative;
 
         &:hover {
             background: @menuHoverColor;
         }
+    }
+
+    a strong {
+        font-weight: bold;
     }
 
     a[href*="&table="] {
@@ -205,6 +219,8 @@ h1 {
 }
 
 #logins {
+    .menu-list();
+
     border-top: 1px solid @blockBorderColor;
 
     a {
