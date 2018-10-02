@@ -100,34 +100,40 @@ h1 {
     text-overflow: ellipsis;
 
     &.active {
+        background: @lightBgColor;
         color: @linkColor;
-        font-weight: bold;
+
+        &:hover {
+            background: @lightBgColorHover;
+        }
     }
 }
 
 #tables {
+    li {
+        position: relative;
+
+        &:hover {
+            background: @menuHoverColor;
+        }
+    }
+
     a[href*="&table="] {
         .menu-link();
         padding-right: 0;
     }
 
-    a[href*="&table="]:hover {
-        background: @menuHoverColor;
-    }
-
     a[href*="&select="] {
-        float: right;
+        position: absolute;
+        right: 0;
+        top: 0;
         display: block;
         padding: 2px 7px;
         height: 20px;
         line-height: 20px;
-        color: @noteColor !important;
+        color: @noteColor;
         overflow: hidden;
         width: 16px;
-
-        &:hover {
-            color: @textColor !important;
-        }
 
         &:before {
             content: "📄  ";
@@ -147,8 +153,21 @@ h1 {
     }
 
     a.active + a {
+        background: @lightBgColor;
         color: @linkColor;
         font-weight: bold;
+
+        &:hover {
+            background: @lightBgColorHover;
+        }
+    }
+
+    a.active:hover + a {
+        background: @lightBgColorHover;
+    }
+
+    a:hover + a.active {
+        background: @lightBgColorHover;
     }
 
     br {
@@ -164,12 +183,8 @@ h1 {
 
     a[href*="&select="] {
         .menu-link();
-        float: none;
-        color: @textColor !important;
-
-        &.active {
-            color: @linkColor !important;
-        }
+        position: static;
+        color: @textColor;
 
         &:before {
             content: "";
