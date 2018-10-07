@@ -30,25 +30,6 @@ class AdminerSimpleMenu
     }
 
     /**
-     * Prints HTML code inside <head>.
-     */
-    public function head()
-    {
-        ?>
-
-        <style>
-            #tables {
-                margin: 0;
-                padding: 0.8em 1em;
-                border-bottom: 1px solid #ccc;
-                list-style: none;
-            }
-        </style>
-
-        <?php
-    }
-
-    /**
      * Prints table list in menu.
      *
      * @param array $tables Table list.
@@ -62,9 +43,15 @@ class AdminerSimpleMenu
             echo "<ul id='tables' class='simple'>" . script("mixin(qs('#tables'), {onmouseover: menuOver, onmouseout: menuOut});");
         }
 
+        $actions = [$_GET["select"], $_GET["edit"], $_GET["table"], $_GET["create"], $_GET["indexes"], $_GET["foreign"], $_GET["trigger"]];
+
         foreach ($tables as $table => $status) {
             $name = Adminer::tableName($status);
-            $active = in_array($table, [$_GET["select"], $_GET["edit"], $_GET["table"], $_GET["create"], $_GET["indexes"], $_GET["foreign"], $_GET["trigger"]]);
+            if ($name == "") {
+                continue;
+            }
+
+            $active = in_array($table, $actions);
 
             if ($this->preferSelect) {
                 $action = "select";
@@ -76,7 +63,7 @@ class AdminerSimpleMenu
 
             echo "<li data-table-name='$name'>";
             if ($this->preferSelect || support("table") || support("indexes")) {
-                echo '<a href="' . h(ME) . $action . '=' . urlencode($table) . '"' . bold($active, (is_view($status) ? "view" : "")) . " title='" . lang($title) . "' data-link='main'>$name</a>";
+                echo '<a href="' . h(ME) . $action . '=' . urlencode($table) . '"' . bold($active, (is_view($status) ? "view" : "")) . "' data-link='main'>$name</a>";
             } else {
                 echo "<span data-link='main'>$name</span>";
             }
