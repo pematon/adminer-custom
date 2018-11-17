@@ -21,16 +21,22 @@ class AdminerJsonPreview
     /** @var bool */
     private $inEdit;
 
+    /** @var int */
+    private $maxTextLength;
+
     /**
      * @param int $maxLevel Max. level in recursion. 0 means no limit.
      * @param bool $inTable Whether apply JSON preview in selection table.
      * @param bool $inEdit Whether apply JSON preview in edit form.
+     * @param int $maxTextLength Maximal length of string values. Longer texts will be truncated with ellipsis sign '…'.
+     *                           0 means no limit.
      */
-    public function __construct($maxLevel = 0, $inTable = true, $inEdit = true)
+    public function __construct($maxLevel = 0, $inTable = true, $inEdit = true, $maxTextLength = self::MAX_TEXT_LENGTH)
     {
         $this->maxLevel = $maxLevel;
         $this->inTable = $inTable;
         $this->inEdit = $inEdit;
+        $this->maxTextLength = $maxTextLength;
     }
 
     /**
@@ -212,8 +218,8 @@ class AdminerJsonPreview
                 $value .= "<code class='jush-js'>" . h(preg_replace('/([,:])([^\s])/', '$1 $2', json_encode($val))) . "</code>";
             } elseif (is_string($val)) {
                 // Shorten string to max. length.
-                if (mb_strlen($val, "UTF-8") > self::MAX_TEXT_LENGTH) {
-                    $val = mb_substr($val, 0, self::MAX_TEXT_LENGTH - 3, "UTF-8") . "...";
+                if ($this->maxTextLength > 0 && mb_strlen($val, "UTF-8") > $this->maxTextLength) {
+                    $val = mb_substr($val, 0, $this->maxTextLength - 1, "UTF-8") . "…";
                 }
 
                 // Add extra new line to make it visible in HTML output.
