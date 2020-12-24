@@ -198,7 +198,7 @@ class AdminerJsonPreview
         }
     }
 
-    public function convertJson($json, $level = 1, $id = 0)
+    private function convertJson($json, $level = 1, $id = 0)
     {
         $value = "";
 
@@ -215,12 +215,13 @@ class AdminerJsonPreview
             if (is_array($val) && ($this->maxLevel <= 0 || $level < $this->maxLevel)) {
                 $value .= $this->convertJson($val, $level + 1);
             } elseif (is_array($val)) {
-                $value .= "<code class='jush-js'>" . h(preg_replace('/([,:])([^\s])/', '$1 $2', json_encode($val))) . "</code>";
+                // Shorten encoded JSON to max. length.
+                $val = $this->truncate(json_encode($val));
+
+                $value .= "<code class='jush-js'>" . h(preg_replace('/([,:])([^\s])/', '$1 $2', $val)) . "</code>";
             } elseif (is_string($val)) {
                 // Shorten string to max. length.
-                if ($this->maxTextLength > 0 && mb_strlen($val, "UTF-8") > $this->maxTextLength) {
-                    $val = mb_substr($val, 0, $this->maxTextLength - 1, "UTF-8") . "…";
-                }
+                $val = $this->truncate($val);
 
                 // Add extra new line to make it visible in HTML output.
                 if (preg_match("@\n$@", $val)) {
@@ -242,5 +243,12 @@ class AdminerJsonPreview
         $value .= "</table>";
 
         return $value;
+    }
+
+    private function truncate($value)
+    {
+        return $this->maxTextLength > 0 && mb_strlen($value, "UTF-8") > $this->maxTextLength
+            ? mb_substr($value, 0, $this->maxTextLength - 1, "UTF-8") . "…"
+            : $value;
     }
 }
