@@ -240,6 +240,7 @@ class AdminerLoginServers
             "simpledb" => "SimpleDB",
             "mongo" => "MongoDB",
             "elastic" => "Elasticsearch",
+            "elastic7" => "Elasticsearch 7",
         ];
 
         return isset($drivers[$driver]) ? $drivers[$driver] : $driver;
