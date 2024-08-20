@@ -10,11 +10,15 @@ function adminer_object()
         include_once "./$filename";
     }
 
+    $serverHost = filter_input(INPUT_SERVER, 'HTTP_HOST');
+    $serverName = filter_input(INPUT_SERVER, 'SERVER_NAME');
+
     // Specify enabled plugins here.
     $plugins = [
         new AdminerDatabaseHide(["mysql", "information_schema", "performance_schema"]),
         new AdminerLoginServers([
-            filter_input(INPUT_SERVER, 'HTTP_HOST') => filter_input(INPUT_SERVER, 'SERVER_NAME')
+            $serverHost => $serverName,
+            "elastic://$serverHost:9200" => $serverName,
         ]),
         new AdminerTablesFilter(),
         new AdminerSimpleMenu(),
