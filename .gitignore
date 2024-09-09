@@ -1,2 +1,3 @@
-.idea/
-css/*.map
+/.idea
+/css/*.map
+/config.php

@@ -9,6 +9,7 @@ cd "$BASEDIR"
 # Master branch
 cp index.php ../adminer-custom
 cp adminer.php ../adminer-custom
+cp README.md ../adminer-custom
 
 cp -r css/*.css ../adminer-custom/css
 cp -r fonts ../adminer-custom
