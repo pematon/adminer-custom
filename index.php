@@ -29,7 +29,6 @@ function adminer_object()
     $plugins = [
         new AdminerDatabaseHide(["mysql", "information_schema", "performance_schema"]),
         new AdminerLoginServers($config["servers"]),
-        new AdminerTablesFilter(),
         new AdminerSimpleMenu(),
         new AdminerCollations(),
         new AdminerJsonPreview(),
