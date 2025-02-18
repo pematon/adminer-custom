@@ -34,7 +34,7 @@ class AdminerLoginServers
      * - mysql://localhost:3306 (server host and port)
      * - pgsql://localhost#database_name (server and database name)
      * - sqlite://database.db (relative path to database file, no authentication)
-     * - sqlite://user:password@/var/www/#database.db (authentication, absolute path as 'server' and file name as 'database')
+     * - sqlite://user:password@/var/www/database.db (authentication, absolute path to database file)
      *
      * Possible driver names are: `sqlite`, `sqlite2`, `pgsql`, `firebird`, `oracle`, `simpledb`, `elastic`, `mysql`,
      * `mongo`, `mssql`. Default driver is `mysql`.
