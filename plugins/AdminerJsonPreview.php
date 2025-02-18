@@ -195,7 +195,7 @@ class AdminerJsonPreview
 
         if ($this->isJson($field, $value) && ($json = json_decode($value, true)) !== null && is_array($json)) {
             echo "<a class='icon json-icon json-link' href='#' title='JSON' data-index='$counter'><span>JSON</span></a><br/>";
-            echo $this->convertJson($json, 1, $counter);
+            echo $this->convertJson($json, 1, $counter++);
         }
     }
 
